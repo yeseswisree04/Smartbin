@@ -27,13 +27,20 @@ def hello():
 @app.route('/update', methods=['POST', 'GET'])
 def update():
     global smartbin
+    global bin_status
+    global work_status
 
     smartbin = request.get_data()
+    smartbin = smartbin.decode('utf-8')
+
+    bin_status, work_status = smartbin.split(' ')
+
+
     return ''
 
 @app.route('/update1')
 def update1():
-    return smartbin
+    return ''
 
 
 
@@ -48,7 +55,7 @@ def value():
 
 @app.route('/data')
 def data():
-        return render_template('Hello.html', message = test)
+        return render_template('Hello.html', bin_status = bin_status, work_status = work_status)
 
 if __name__ == '__main__':
     app.debug = True
