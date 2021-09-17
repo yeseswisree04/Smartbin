@@ -9,6 +9,12 @@ import time
 app = Flask(__name__)
 
 
+bin_status = 'EMPTY'
+work_status = 'COMPLETED'
+
+smartbin = {'A3':[bin_status,work_status]}
+
+
 @app.route('/',methods=['POST','GET'])
 def hello():
     global test
@@ -17,6 +23,21 @@ def hello():
     test = test.decode('utf-8')
     print('{}'.format(test))
     return 'Output is: {}'.format(test)
+
+@app.route('/update', methods=['POST', 'GET'])
+def update():
+    global smartbin
+
+    smartbin = request.get_data()
+
+    return smartbin
+
+
+
+    # bin_status = request.get_data()
+    # bin_status = bin_status.decode('utf-8')
+
+
 
 @app.route('/h')
 def value():
