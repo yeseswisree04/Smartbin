@@ -3,16 +3,28 @@ from flask import Flask, render_template
 from flask import request
 import paho.mqtt.client as mqtt_client
 from flask_sqlalchemy import SQLAlchemy
+from Telegram import sendTelegram 
+import pandas as pd
+
+
 
 import time
 
 app = Flask(__name__)
 
 
-bin_status = 'EMPTY'
-work_status = 'COMPLETED'
+database = {'Bin ID':['B1','B2','B3'],
+      'Bin Status':['EMPTY','EMPTY','EMPTY'],
+      'Driver ID':['D1','D2','D3'],
+      'Driver ChatID':['@Smartbin1','@Smartbin2','@Smartbin3'],
+      'Driver Contact':['bot1925206689:AAEtSxswtMrbicRhJCJeYgimZs6B8WzY9Vc','bot2043471254:AAGgD6tHJW2DjSLP5w4zXQ4FXBtdlmoruIU','bot2038238671:AAEXTO6fNXzgG3DUBntyVnZy1At0tRkZG1w'],
+      'Work Status':['COMPLETED','COMPLETED','COMPLETED'],
+     'GMaps Link':['GPS1','GPS2','GPS3']}
 
-smartbin = {'A3':[bin_status,work_status]}
+global df
+
+df = pd.DataFrame(database)
+df = df.set_index('Bin ID')
 
 
 @app.route('/',methods=['POST','GET'])
@@ -24,38 +36,64 @@ def hello():
     print('{}'.format(test))
     return 'Output is: {}'.format(test)
 
-@app.route('/update', methods=['POST', 'GET'])
-def update():
-    global smartbin
-    global bin_status
-    global work_status
-
-    smartbin = request.get_data()
-    smartbin = smartbin.decode('utf-8')
-
-    bin_status, work_status = smartbin.split(' ')
-
-
-    return ''
-
-@app.route('/update1')
-def update1():
-    return ''
-
-
-
-    # bin_status = request.get_data()
-    # bin_status = bin_status.decode('utf-8')
-
-
-
 @app.route('/h')
 def value():
         return test
 
-@app.route('/data')
+
+
+# @app.route('/update', methods=['POST', 'GET'])
+# def update():
+#     global smartbin
+#     global smartbin_dic
+#     global bin_id
+#     global bin_status
+#     global work_status
+#     global gmap_link
+
+#     smartbin = request.get_data()
+#     smartbin = smartbin.decode('utf-8')
+
+#     print(smartbin)
+
+#     bin_id, bin_status, work_status = smartbin.split(' ')
+#     smartbin_dic[bin_id] = [bin_status,work_status]
+
+#     return ''
+
+
+@app.route('/update1', methods=['POST', 'GET'])
+def update():
+    global smartstring
+    global bin_id
+    global bin_status
+    global work_status
+    global gmap_link
+
+    smartstring = request.get_data()
+    smartstring = smartstring.decode('utf-8')
+
+    bin_id, bin_status, work_status, gmap_link = smartstring.split(' ')
+
+    if bin_status == 'FILLED':
+        print(bin_id + ' FILLED')
+        sendTelegram(df.loc[bin_id,'Driver ChatID'],df.loc[bin_id,'Driver Contact'], 'The Bin is FULL!!')
+        sendTelegram(df.loc[bin_id,'Driver ChatID'],df.loc[bin_id,'Driver Contact'],gmap_link)
+
+        work_status='CONTACTED'
+    else: work_status='COMPLETED'
+
+    df.loc[bin_id,:] = {'Bin Status': bin_status,'Driver ID':df.loc[bin_id,'Driver ID'],'Driver ChatID':df.loc[bin_id,'Driver ChatID'],'Driver Contact':df.loc[bin_id,'Driver Contact'],'Work Status':work_status,'GMaps Link':gmap_link}
+
+    return ''
+
+@app.route('/data', methods = ['POST','GET'])
 def data():
-        return render_template('Hello.html', bin_status = bin_status, work_status = work_status)
+        # 
+       
+        return render_template('Hello.html', data = df.to_html())
+        # else:
+        #     return render_template('Hello.html', bin_status = bin_status, work_status = work_status)
 
 if __name__ == '__main__':
     app.debug = True

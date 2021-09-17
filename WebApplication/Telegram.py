@@ -2,13 +2,13 @@ import json, requests
 
 
 """ Telegram Access Parameters. """
-Telegram_ChatID = "@Smartbin1" #"@CHAT ID OF THE TELEGRAM CHANNEL"
-Telegram_bottoken = "bot1925206689:AAEtSxswtMrbicRhJCJeYgimZs6B8WzY9Vc" #"TELEGRAM BOT TOKEN START WITH BOT[FOLLOWED BY TOKEN]"
+Telegram_ChatID = "@Smartbin3" #"@CHAT ID OF THE TELEGRAM CHANNEL"
+Telegram_bottoken = "bot2038238671:AAEXTO6fNXzgG3DUBntyVnZy1At0tRkZG1w" #"TELEGRAM BOT TOKEN START WITH BOT[FOLLOWED BY TOKEN]"
 
 
 # sms = Sms(Twilio_SSID, Twilio_Auth, My_Number, Twilio_Number)
 
-def sendTelegram (message):
+def sendTelegram (Telegram_ChatID, Telegram_bottoken, message):
     url = "https://api.telegram.org/" + Telegram_bottoken + "/sendMessage"
     data = {
         "chat_id": Telegram_ChatID,
@@ -29,4 +29,4 @@ def sendTelegram (message):
             print(error)
             return False
 
-sendTelegram("Hello")
+# sendTelegram(Telegram_ChatID, Telegram_bottoken,"Hello")

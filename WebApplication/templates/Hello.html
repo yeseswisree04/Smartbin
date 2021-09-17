@@ -1,9 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head><title>Smart Bin Management</title>
+  </head>
+</html>
+
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/Hello_design.css') }}">
 
 <body>
 <center><h1>Smart Bin</h1></center>
 <center>
-<table style="width: 70%;">
+<!-- <table style="width: 70%;">
   <tr>
     <th>Bin.ID</th>
     <th>Bin Status</th>
@@ -29,6 +35,11 @@
     <td>A3</td>
     <td>{{work_status}}</td>
   </tr>
-</table>
+</table> -->
+<!-- {% for table in tables %}
+            {{titles[loop.index]}}
+            {{ table|safe }}
+{% endfor %} -->
+{{data | safe}}
 </center>
 </body>
