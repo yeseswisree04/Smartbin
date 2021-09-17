@@ -9,12 +9,21 @@ import time
 app = Flask(__name__)
 
 
-
-
-@app.route('/')
+@app.route('/',methods=['POST','GET'])
 def hello():
-    return render_template('Hello.html')
+    global test
 
+    test = request.get_data()
+    print('{}'.format(test))
+    return 'Output is: {}'.format(test)
+
+@app.route('/h')
+def value():
+        return test
+
+@app.route('/data')
+def data():
+        return render_template('Hello.html', message = test)
 
 if __name__ == '__main__':
     app.debug = True
