@@ -29,7 +29,10 @@ def update():
     global smartbin
 
     smartbin = request.get_data()
+    return ''
 
+@app.route('/update1')
+def update1():
     return smartbin
 
 
