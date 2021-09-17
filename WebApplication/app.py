@@ -14,6 +14,7 @@ def hello():
     global test
 
     test = request.get_data()
+    test = test.decode('utf-8')
     print('{}'.format(test))
     return 'Output is: {}'.format(test)
 
