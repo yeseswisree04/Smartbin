@@ -1,11 +1,12 @@
 import json, requests
 
+
 """ Telegram Access Parameters. """
 Telegram_ChatID = "@Smartbin1" #"@CHAT ID OF THE TELEGRAM CHANNEL"
 Telegram_bottoken = "bot1925206689:AAEtSxswtMrbicRhJCJeYgimZs6B8WzY9Vc" #"TELEGRAM BOT TOKEN START WITH BOT[FOLLOWED BY TOKEN]"
 
 
-
+# sms = Sms(Twilio_SSID, Twilio_Auth, My_Number, Twilio_Number)
 
 def sendTelegram (message):
     url = "https://api.telegram.org/" + Telegram_bottoken + "/sendMessage"
